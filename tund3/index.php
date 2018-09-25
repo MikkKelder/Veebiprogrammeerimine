@@ -2,13 +2,20 @@
     //echo "See on minu esimene php!"; //tark teade
     $firstName = "Mikk";
     $lastName = "Kelder";
-    $dateToday = date("d.m.Y");
+    $dateToday = date("d");
+    $yearNow = date("Y");
     $hourNow = date("G");
+    $monthNow = date("m");
     $weekdayToday = date("N");
     $weekdayNamesET = ["Esmaspäev", "Teisipäev", "Kolmapäev", "Neljapäev", "Reede", "Laupäev", "Pühapäev"];
+    $monthNamesET = ["Jaanuar", "Veebruar", "Märts", "Aprill", "Märts", "Mai", "Juuni", "Juuli", "August", "September", "Oktoober", "November", "Detsember"];
+    $thisMonth = $monthNamesET[$monthNow + 0];
+
     //var_dump($weekdayNamesET); viskab kõik var'id mis loetud on ette
     //echo $weekdayNamesET[1]; [] võtab loetust var'i
     //echo $weekdayToday;  sisestab tänase päeva.
+    //var_dump($monthNamesET);
+    //var_dump($thisMonth);
     $partOfDay = "";
     if ($hourNow < 8) {
         $partOfDay = "varajane hommik.";
@@ -19,7 +26,7 @@
     if ($hourNow > 16) {
         $partOfDay = "loodetavasti vaba aeg.";
     }
-
+    
     //juhusliku pildi valimine
     $picURL = "http://www.cs.tlu.ee/~rinde/media/fotod/TLU_600x400/tlu_"; //piltide asukoht 
     $picEXT = ".jpg"; // pildi lõputüüp mis valib
@@ -47,12 +54,13 @@
     </h1>
     <?php
     //echo "<p> Tänane kuupäev on:  " . $dateToday . "</p> \n";
-    echo "<p> Täna on  " .$weekdayNamesET[$weekdayToday - 1] .", " .$dateToday .".</p> \n";
+    echo "<p> Täna on  " .$weekdayNamesET[$weekdayToday - 1] .", " .$dateToday .". " .$thisMonth ." " .$yearNow .".</p> \n";
     echo "<p> Lehe avamise hetkel oli kell " .date("H:i:s") ." käes oli " .$partOfDay . "</p>\n";
     ?>
     <p>Siin on minu <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames valminud leht ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
     <p>Teised lehed: <a href="photo.php">photo.php</a>.</p>
         <p>Teised lehed: <a href="page.php">page.php</a>.</p>
+        <p>Teised lehed: <a href="photo2.php">photo2.php</a>.</p>
     <p>Kodune ülesanne on edukalt sooritatud1</p>
     <img src="<?php echo $picFILE; ?>" alt="TLÜ">
     <p>Minu sõber teeb ka <a href="../../../~andrmal" target="_blank">veebi</a></p>
