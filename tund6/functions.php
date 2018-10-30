@@ -6,6 +6,22 @@
 //kasutan sessiooni
 session_start();
 
+  function validatemsg($editId, $validation){
+	$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
+	$stmt = $mysqli->prepare("UPDATE vpamsg SET acceptedby=?, accepted=?, accepttime=now() WHERE id=?");
+	$stmt->bind_param("iii", $_SESSION["userId"], $validation, $editId);
+	if($stmt->execute()){
+	  echo "Õnnestus sõnum valideeriti";
+	  header("Location: validatemsg.php");
+	  exit();
+	} else {
+	  echo "MIdagi läks nihu: " .$stmt->error;
+	}
+	$stmt->close();
+	$mysqli->close();
+
+  }
+
   //valitud sõnumi lugemine valideerimiseks
   function readmsgforvalidation($editId){
 	$notice = "";
@@ -21,17 +37,17 @@ session_start();
 	$mysqli->close();
 	return $notice;
   }
-  
+
   //valideerimata sõnumite nimekiri
   function readallunvalidatedmessages(){
 	$notice = "<ul> \n";
 	$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
-	$stmt = $mysqli->prepare("SELECT id, message FROM vpamsg WHERE accepted IS NULL");
+	$stmt = $mysqli->prepare("SELECT id, message FROM vpamsg WHERE accepted IS NULL ORDER BY id DESC");
 	echo $mysqli->error;
 	$stmt->bind_result($msgid, $msg);
 	if($stmt->execute()){
 	  while($stmt->fetch()){
-		$notice .= "<li>" .$msg .'<br><a href="validatemessage.php?id=' .$msgid .'">Valideeri</a></li>' ."\n"; 
+		$notice .= "<li>" .$msg .'<br><a href="validatemessage.php?id=' .$msgid .'">Valideeri</a></li>' ."\n";
 	  }
     } else {
 	  $notice .= "<li>Sõnumite lugemisel tekkis viga!" .$stmt->error ."</li> \n";
@@ -41,7 +57,7 @@ session_start();
 	$mysqli->close();
 	return $notice;
   }
-  
+
 
 //sisselogimine
   function signin($email, $password){
@@ -70,8 +86,8 @@ session_start();
 		  $notice = "Sisestasite vale salasõna!";
         }
 	  } else {
-		$notice = "Sellist kasutajat (" .$email .") ei leitud!";  
-	  }		  
+		$notice = "Sellist kasutajat (" .$email .") ei leitud!";
+	  }
 	} else {
 	  $notice = "Sisselogimisel tekkis tehniline viga!" .$stmt->error;
 	}
@@ -79,7 +95,7 @@ session_start();
 	$mysqli->close();
 	return $notice;
 }
-  
+
   function signup($firstName, $lastName, $birthDate, $gender, $email, $password){
 	$notice = "";
 	$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
@@ -94,12 +110,12 @@ session_start();
 	} else {
 	  $notice = "Kasutaja loomisel tekkis viga: " .$stmt->error;
 	}
-	
+
 	$stmt->close();
 	$mysqli->close();
 	return $notice;
   }
-  
+
   function saveamsg($msg){
 	$notice = "";
     //loome andmebaasiühenduse
@@ -123,7 +139,7 @@ session_start();
 	$mysqli->close();
 	return $notice;
   }
-  
+
   function readallmessages(){
 	$notice = "";
 	$mysqli = new mysqli($GLOBALS["serverHost"], $GLOBALS["serverUsername"], $GLOBALS["serverPassword"], $GLOBALS["database"]);
@@ -138,7 +154,7 @@ session_start();
 	$mysqli->close();
 	return $notice;
   }
-  
+
   //teksti sisendi kontrollimine
   function test_input($data) {
     $data = trim($data);

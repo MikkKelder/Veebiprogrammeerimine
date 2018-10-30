@@ -41,8 +41,8 @@
   <form method="POST" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>">
     <input name="id" type="hidden" value="<?php echo $_GET["id"]; ?>">
     <p><?php echo $msg; ?></p>
-    <input type="radio" name="accepted" value="0" checked><label>Keela näitamine</label><br>
-    <input type="radio" name="accepted" value="1"><label>Luba näitamine</label><br>
+    <input type="radio" name="validation" value="0" checked><label>Keela näitamine</label><br>
+    <input type="radio" name="validation" value="1"><label>Luba näitamine</label><br>
     <input type="submit" value="Kinnita" name="submitValidation">
   </form>
   <hr>
