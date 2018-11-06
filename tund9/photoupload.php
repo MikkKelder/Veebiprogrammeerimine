@@ -11,7 +11,6 @@ if(isset($_GET["logout"])){
     header("Location: index_2.php");
     exit();
 }
-
 //piltide üleslaadimise osa
     $target_dir = "../vp_photouploads/";
   $uploadOk = 1;
@@ -21,7 +20,11 @@ if(isset($_GET["logout"])){
 
       $imageFileType = strtolower(pathinfo(basename($_FILES["fileToUpload"]["name"]),PATHINFO_EXTENSION));
       $timestamp = microtime(1) * 10000;
-      $target_file = $target_dir . "vp_" .$timestamp ."." .$imageFileType;
+
+      $target_file_name = "vp_" .$timestamp ."." .$imageFileType;
+
+
+      $target_file = $target_dir .$target_file_name;
       //$target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
 
 
@@ -74,36 +77,39 @@ if(isset($_GET["logout"])){
         $sizeRatio = $imageHeight / 400;
       }
 
-      $newWidth = $imageWidth / $sizeRatio;
-      $newHeight = $imageHeight / $sizeRatio;
+      $newWidth = round($imageWidth / $sizeRatio);
+      $newHeight = round($imageHeight / $sizeRatio);
 
       $myImage = resizeImage($myTempImage, $imageWidth, $imageHeight, $newWidth, $newHeight);
 
+      //lisan watermargi
+      $waterMark = imagecreatefrompng("../vp_picfiles/vp_logo_w100_overlay.png");
+      $waterMarkWidth = imagesx($waterMark);
+      $waterMarkHeight = imagesy($waterMark);
+      $waterMarkPosX = $newWidth - $waterMarkWidth - 10;
+      $waterMarkPosY = $newHeight - $waterMarkHeight - 10;
+
+      imagecopy($myImage, $waterMark, $waterMarkPosX, $waterMarkPosY, 0, 0, $waterMarkWidth, $waterMarkHeight);
+
+
+
         //lähtudes failitüübist kirjutan pildifaili
-        if($imageFileType == "jpg" or $imageFileType == "jpeg"){
-          if(imagejpeg($myImage, $target_file, 95)){
-            echo "Fail ". basename( $_FILES["fileToUpload"]["name"]). " on edukalt üles laetud.";
-          }
-          else {
-              echo "Vabandage faili üleslaadimisel tekkis viga!.";
-          }
-        }
-        if($imageFileType == "png"){
-          if(imagepng($myImage, $target_file, 6)){
-            echo "Fail ". basename( $_FILES["fileToUpload"]["name"]). " on edukalt üles laetud.";
-          }
-          else {
-              echo "Vabandage faili üleslaadimisel tekkis viga!.";
-          }
-        }
-        if($imageFileType == "gif"){
-          if(imagegif($myImage, $target_file)){
-            echo "Fail ". basename( $_FILES["fileToUpload"]["name"]). " on edukalt üles laetud.";
-          }
-          else {
-              echo "Vabandage faili üleslaadimisel tekkis viga!.";
-          }
-        }
+        $textToImage = "Veebiprogrammeerimine";
+				$textColor = imagecolorallocatealpha($myImage, 255,255,255, 60);
+				//alpha 0 ... 127
+				//imagettftext($myImage, 20, -43, 10, 45, $textColor, "../vp_picfiles/ARIALBD.TTF", $textToImage);
+				imagettftext($myImage, 20, 0, 10, 25, $textColor, "../vp_picfiles/Arial Bold.ttf", $textToImage);
+
+				//muudetud suurusega pilt kirjutatakse pildifailiks
+				if($imageFileType == "jpg" or $imageFileType == "jpeg"){
+				  if(imagejpeg($myImage, $target_file, 90)){
+                    echo "Korras!";
+					//kui pilt salvestati, siis lisame andmebaasi
+					addPhotoData($target_file_name, $_POST["altText"], $_POST["privacy"]);
+				  } else {
+					echo "Pahasti!";
+				  }
+				}
 
         imagedestroy($myTempImage);
         imagedestroy($myImage);
@@ -140,7 +146,15 @@ function resizeImage($image, $ow, $oh, $w, $h){
   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" enctype="multipart/form-data">
     <label>Vali üleslaetav pilt: </label>
     <input type="file" name="fileToUpload" id="fileToUpload">
+    <lable>Pildi kirjeldus (max 256 tähemärki): </lable>
+    <input type:"text" name="altText">
     <br>
+    <lable>Pildi kasutajaõigused: </lable><br>
+    <input type="radio" name="privacy" value = "1"><lable>Avalik</lable>
+    <input type="radio" name="privacy" value = "2"><lable>Sisselogitud kasutajatele</lable>
+    <input type="radio" name="privacy" value = "3" checked><lable>Privaatne</lable>
+    <br>
+
     <input type="submit" value="Lae pilt üles" name="submitImage">
   </form>
   </body>

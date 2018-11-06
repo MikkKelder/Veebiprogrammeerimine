@@ -36,21 +36,36 @@
 	  $mytxtcolor = $myprofile->txtcolor;
     }
   }
-
-
-  $pageTitle = "Kasutajaprofiil";
-
-  require("header.php");
+  $pageTitle ="kasutajaprofiil";
+  require("header.php")
 ?>
 
-
-	<p>See leht on valminud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
-	<hr>
-	<h2>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+	<style>
+	  <?php
+        echo "body{background-color: " .$mybgcolor ."; \n";
+		echo "color: " .$mytxtcolor ."} \n";
+	  ?>
+	</style>
+	<title>
+	  <?php
+	    echo $_SESSION["userFirstName"];
+		echo " ";
+		echo $_SESSION["userLastName"];
+	  ?>
+	, õppetöö</title>
+  </head>
+  <body>
+    <h1>
 	  <?php
 	    echo $_SESSION["firstName"] ." " .$_SESSION["lastName"];
 	  ?>
-	</h2>
+	profiil</h1>
+	<p>See leht on valminud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
+	<hr>
 	<ul>
 	  <li><a href="?logout=1">Logi välja</a>!</li>
 	  <li><a href="main.php">Tagasi pealehele</a></li>
