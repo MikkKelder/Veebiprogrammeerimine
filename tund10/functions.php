@@ -83,7 +83,7 @@ $mysqli->close();
 	} else {
 		//profiili pole, salvestame
 		$stmt->close();
-		//INSERT INTO vpusers3 (firstname, lastname, birthdate, gender, email, password) VALUES(?,?,?,?,?,?)"
+		//INSERT INTO vpusers (firstname, lastname, birthdate, gender, email, password) VALUES(?,?,?,?,?,?)"
 		$stmt = $mysqli->prepare("INSERT INTO vpuserprofiles (userid, description, bgcolor, txtcolor) VALUES(?,?,?,?)");
 		echo $mysqli->error;
 		$stmt->bind_param("isss", $_SESSION["userId"], $desc, $bgcol, $txtcol);

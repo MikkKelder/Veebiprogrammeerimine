@@ -171,7 +171,7 @@
     ?>" alt="<?php
     echo $_SESSION["firstName"] ." " .$_SESSION["lastName"];
     ?>">
-</d</p>
+</div></p>
 
 	<p>See leht on valminud <a href="http://www.tlu.ee" target="_blank">TLÜ</a> õppetöö raames ja ei oma mingisugust, mõtestatud või muul moel väärtuslikku sisu.</p>
 	<hr>
