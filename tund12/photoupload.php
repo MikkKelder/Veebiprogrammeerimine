@@ -35,7 +35,7 @@ if(isset($_POST["submitPic"])) {
     if(!empty($_FILES["fileToUpload"]["name"])){
         $myPhoto = new Photoupload($_FILES["fileToUpload"]);
         $myPhoto->readExif();
-        echo $myPhoto->photoDate;
+        //echo $myPhoto->photoDate;
         //  var_dump($exif);
         if(!empty($myPhoto->photoDate)){
             $textToImage = $myPhoto->photoDate;
@@ -89,6 +89,7 @@ if(isset($_POST["submitPic"])) {
 
 //lehe päise laadimise osa
 $pageTitle = "Fotode üleslaadimine";
+$scripts = '<script type="text/javascript" src="javascript/checkFileSize.js" defer></script>' ."\n";
 require("header.php");
 ?>
 
@@ -111,7 +112,7 @@ require("header.php");
     <input type="radio" name="privacy" value="2"><label>Sisseloginud kasutajatele</label>&nbsp;
     <input type="radio" name="privacy" value="3" checked><label>Isiklik</label>
     <br>
-    <input type="submit" value="Lae pilt üles" name="submitPic"><span><?php echo $notice; ?></span>
+    <input id="submitPic" type="submit" value="Lae pilt üles" name="submitPic"><span id="infoPlace"><?php echo $notice; ?></span>
 </form>
 </body>
 </html>

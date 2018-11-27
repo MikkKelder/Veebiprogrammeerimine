@@ -35,7 +35,7 @@ if(isset($_POST["submitPic"])) {
     if(!empty($_FILES["fileToUpload"]["name"])){
         $myPhoto = new Photoupload($_FILES["fileToUpload"]);
         $myPhoto->readExif();
-        echo $myPhoto->photoDate;
+        //echo $myPhoto->photoDate;
         //  var_dump($exif);
         if(!empty($myPhoto->photoDate)){
             $textToImage = $myPhoto->photoDate;
